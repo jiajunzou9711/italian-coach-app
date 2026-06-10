@@ -1,6 +1,18 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildResultsPayload } from '../js/results.js';
+import { buildResultsPayload, mergeResultsItems } from '../js/results.js';
+
+test('mergeResultsItems appends new items after existing ones', () => {
+  const existing = { items: [{ mode: 'dettato', correct: true }] };
+  const merged = mergeResultsItems(existing, [{ mode: 'parlato', correct: false }]);
+  assert.equal(merged.length, 2);
+  assert.equal(merged[0].mode, 'dettato');
+  assert.equal(merged[1].mode, 'parlato');
+});
+
+test('mergeResultsItems handles missing existing payload', () => {
+  assert.deepEqual(mergeResultsItems(null, [{ mode: 'ascolto', correct: true }]).length, 1);
+});
 
 test('buildResultsPayload summarizes counts', () => {
   const items = [

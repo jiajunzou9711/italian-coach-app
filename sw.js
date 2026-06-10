@@ -1,4 +1,4 @@
-const VERSION = 'coach-v1';
+const VERSION = 'coach-v2';
 const SHELL = [
   '.',
   'index.html',

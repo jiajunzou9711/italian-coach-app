@@ -8,6 +8,17 @@ export function normalize(s) {
     .trim();
 }
 
+// Like normalize but keeps accents — for typed dictation, where
+// 'perche' vs 'perché' and 'vuele' vs 'vuole' must NOT match.
+export function normalizeStrict(s) {
+  return s
+    .toLowerCase()
+    .normalize('NFC')
+    .replace(/[^\p{L}\p{N}\s']/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function levenshtein(a, b) {
   const m = a.length;
   const n = b.length;
@@ -45,9 +56,9 @@ export function fuzzyMatch(answer, accepted) {
 
 // LCS-based word alignment on normalized words.
 // status: 'ok' (matched), 'missing' (expected, not said), 'extra' (said, not expected)
-export function wordDiff(expected, actual) {
-  const e = normalize(expected).split(' ').filter(Boolean);
-  const a = normalize(actual).split(' ').filter(Boolean);
+export function wordDiff(expected, actual, norm = normalize) {
+  const e = norm(expected).split(' ').filter(Boolean);
+  const a = norm(actual).split(' ').filter(Boolean);
   const m = e.length;
   const n = a.length;
   const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));

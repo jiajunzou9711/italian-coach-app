@@ -27,6 +27,11 @@ export function addResult(date, item) {
   localStorage.setItem(PENDING_KEY, JSON.stringify(all));
 }
 
+export function mergeResultsItems(existing, newItems) {
+  const prior = Array.isArray(existing?.items) ? existing.items : [];
+  return [...prior, ...newItems];
+}
+
 export function buildResultsPayload(date, items) {
   const counts = { total: items.length, correct: 0, incorrect: 0, overridden: 0 };
   for (const it of items) {
@@ -46,7 +51,12 @@ export async function syncPending() {
   const all = readPending();
   let synced = 0;
   for (const [date, items] of Object.entries(all)) {
-    await putFile(cfg, `results/${date}.json`, buildResultsPayload(date, items), `Results ${date}`);
+    await putFile(
+      cfg,
+      `results/${date}.json`,
+      (existing) => buildResultsPayload(date, mergeResultsItems(existing, items)),
+      `Results ${date}`,
+    );
     delete all[date];
     localStorage.setItem(PENDING_KEY, JSON.stringify(all));
     synced++;
@@ -54,15 +64,29 @@ export async function syncPending() {
   return { synced };
 }
 
-async function putFile(cfg, path, obj, message) {
+async function putFile(cfg, path, builder, message) {
   const api = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${path}`;
   const headers = {
     Authorization: `Bearer ${cfg.token}`,
     Accept: 'application/vnd.github+json',
   };
   let sha;
+  let existingPayload = null;
   const probe = await fetch(api, { headers });
-  if (probe.ok) sha = (await probe.json()).sha;
+  if (probe.ok) {
+    const probeJson = await probe.json();
+    sha = probeJson.sha;
+    try {
+      existingPayload = JSON.parse(
+        new TextDecoder().decode(
+          Uint8Array.from(atob(probeJson.content.replace(/\n/g, '')), (c) => c.charCodeAt(0)),
+        ),
+      );
+    } catch {
+      // ignore malformed existing content
+    }
+  }
+  const obj = builder(existingPayload);
   const body = { message, content: toBase64(JSON.stringify(obj, null, 2)) };
   if (sha) body.sha = sha;
   const res = await fetch(api, { method: 'PUT', headers, body: JSON.stringify(body) });

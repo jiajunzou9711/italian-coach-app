@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { normalize, levenshtein, fuzzyMatch, wordDiff } from '../js/matching.js';
+import { normalize, normalizeStrict, levenshtein, fuzzyMatch, wordDiff } from '../js/matching.js';
 
 test('normalize lowercases, strips accents and punctuation, collapses spaces', () => {
   assert.equal(normalize('  Perché, no!  '), 'perche no');
@@ -44,5 +44,20 @@ test('wordDiff marks ok/missing/extra words', () => {
     { word: 'leggo', status: 'extra' },
     { word: 'un', status: 'ok' },
     { word: 'libro', status: 'ok' },
+  ]);
+});
+
+test('normalizeStrict keeps accents and rejects misspellings', () => {
+  assert.equal(normalizeStrict('Perché, no!'), 'perché no');
+  assert.notEqual(normalizeStrict('vuele'), normalizeStrict('vuole'));
+  assert.notEqual(normalizeStrict('perche'), normalizeStrict('perché'));
+});
+
+test('wordDiff with normalizeStrict preserves accents in output', () => {
+  const d = wordDiff('Perché vuole?', 'Perche vuole?', normalizeStrict);
+  assert.deepEqual(d, [
+    { word: 'perché', status: 'missing' },
+    { word: 'perche', status: 'extra' },
+    { word: 'vuole', status: 'ok' },
   ]);
 });

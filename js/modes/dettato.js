@@ -1,5 +1,5 @@
 import { speak } from '../speech.js';
-import { fuzzyMatch, wordDiff } from '../matching.js';
+import { normalizeStrict, wordDiff } from '../matching.js';
 import { addResult } from '../results.js';
 
 export function renderDettato(screen, pack) {
@@ -28,13 +28,13 @@ export function renderDettato(screen, pack) {
   screen.querySelector('#check').onclick = () => {
     const given = screen.querySelector('#answer').value.trim();
     if (!given) return;
-    const r = fuzzyMatch(given, [item().it]);
-    const diff = wordDiff(item().it, given);
+    const ok = normalizeStrict(given) === normalizeStrict(item().it);
+    const diff = wordDiff(item().it, given, normalizeStrict);
     screen.querySelector('#feedback').innerHTML =
-      (r.ok ? '<p>✅ Giusto!</p>' : '<p>❌ Quasi:</p>') +
+      (ok ? '<p>✅ Giusto!</p>' : '<p>❌ Quasi:</p>') +
       `<p>${diff.map((w) => `<span class="w-${w.status}">${w.word}</span>`).join(' ')}</p>` +
       `<p class="expected">Testo: ${item().it}</p>`;
-    addResult(pack.date, { mode: 'dettato', expected: item().it, given, correct: r.ok });
+    addResult(pack.date, { mode: 'dettato', expected: item().it, given, correct: ok });
     screen.querySelector('#check').disabled = true;
     screen.querySelector('#next').classList.remove('hidden');
   };
