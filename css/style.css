@@ -1,0 +1,20 @@
+:root { font-family: -apple-system, system-ui, sans-serif; }
+body { margin: 0 auto; padding: env(safe-area-inset-top) 12px 24px; max-width: 600px; }
+header h1 { font-size: 1.3rem; margin: 8px 0 0; }
+#pack-info { color: #555; margin: 4px 0 8px; }
+nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+button { font-size: 1rem; padding: 10px 12px; border-radius: 10px; border: 1px solid #ccc; background: #f5f5f5; }
+main button { margin: 6px 4px 6px 0; }
+textarea, input { width: 100%; font-size: 1.1rem; padding: 8px; box-sizing: border-box; margin: 6px 0; }
+label { display: block; margin-top: 8px; }
+select { font-size: 1rem; padding: 6px; }
+.hidden { display: none; }
+.zh { color: #777; }
+.prompt { font-size: 1.3rem; }
+.expected { color: #066d2c; }
+.w-ok { color: #066d2c; }
+.w-missing { color: #b00020; text-decoration: underline; }
+.w-extra { color: #b00020; text-decoration: line-through; }
+.lines li { margin: 6px 0; }
+.q { border-top: 1px solid #eee; padding: 8px 0; }
+.verdict { margin-left: 8px; }
