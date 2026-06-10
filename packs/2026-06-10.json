@@ -1,0 +1,44 @@
+{
+  "date": "2026-06-10",
+  "focus": "modal + infinito in produzione libera; cambio di soggetto (io/lei/loro/noi)",
+  "dialogue": {
+    "title": "Stasera cucino io",
+    "lines": [
+      { "speaker": "A", "it": "Ciao! Stasera voglio cucinare la pasta.", "zh": "你好！今晚我想做意大利面。" },
+      { "speaker": "B", "it": "Buona idea! Ma non abbiamo il formaggio.", "zh": "好主意！但是我们没有奶酪。" },
+      { "speaker": "A", "it": "Allora devo andare al negozio a comprare il formaggio.", "zh": "那我得去商店买奶酪。" },
+      { "speaker": "B", "it": "Puoi comprare anche il pane e la frutta?", "zh": "你能也买面包和水果吗？" },
+      { "speaker": "A", "it": "Va bene. Tu cosa fai stasera?", "zh": "好的。你今晚做什么？" },
+      { "speaker": "B", "it": "Io leggo un libro e poi guardo la partita.", "zh": "我读一本书，然后看比赛。" }
+    ],
+    "questions": [
+      { "q": "Cosa vuole cucinare A stasera?", "options": ["La pasta", "Il pane", "La carne"], "answer": 0 },
+      { "q": "Dove deve andare A?", "options": ["Al negozio", "A scuola", "Alla stazione"], "answer": 0 },
+      { "q": "Cosa fa B stasera?", "options": ["Legge un libro e guarda la partita", "Cucina la pasta", "Esce con gli amici"], "answer": 0 }
+    ]
+  },
+  "dictation": [
+    { "it": "Lei vuole comprare il formaggio.", "hint": "她想买奶酪。" },
+    { "it": "Noi dobbiamo studiare stasera.", "hint": "我们今晚必须学习。" },
+    { "it": "Loro devono leggere il libro.", "hint": "他们必须读这本书。" },
+    { "it": "Voglio fare una passeggiata.", "hint": "我想散步。" }
+  ],
+  "speaking": [
+    { "prompt_zh": "我想去商店买面包。", "accepted": ["Voglio andare al negozio a comprare il pane.", "Voglio andare al negozio per comprare il pane."], "target_point": "volere + andare + a/per + infinito" },
+    { "prompt_zh": "他们晚上必须学习。", "accepted": ["Loro devono studiare la sera.", "Devono studiare la sera.", "Loro devono studiare stasera.", "Devono studiare stasera."], "target_point": "dovere loro + infinito" },
+    { "prompt_zh": "她想读一本书。", "accepted": ["Lei vuole leggere un libro.", "Vuole leggere un libro."], "target_point": "volere lei + infinito" },
+    { "prompt_zh": "我们可以在家做饭。", "accepted": ["Noi possiamo cucinare a casa.", "Possiamo cucinare a casa."], "target_point": "potere noi + infinito" },
+    { "prompt_zh": "爸爸想看比赛。", "accepted": ["Il papà vuole guardare la partita.", "Papà vuole guardare la partita."], "target_point": "volere lui + infinito (non voglio)" }
+  ],
+  "shadowing": [
+    { "it": "Stasera voglio cucinare la pasta." },
+    { "it": "Devo andare al negozio a comprare il formaggio." },
+    { "it": "Puoi comprare anche il pane e la frutta?" }
+  ],
+  "vocab": [
+    { "it": "allora", "zh": "那么" },
+    { "it": "anche", "zh": "也" },
+    { "it": "poi", "zh": "然后" },
+    { "it": "stasera", "zh": "今晚" }
+  ]
+}
