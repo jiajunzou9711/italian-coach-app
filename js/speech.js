@@ -10,11 +10,15 @@ export function loadItalianVoice() {
   });
 }
 
+let defaultVoice = null;
+export function setDefaultVoice(v) { defaultVoice = v; }
+
 export function speak(text, { rate = 1, voice = null } = {}) {
   return new Promise((resolve, reject) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'it-IT';
-    if (voice) u.voice = voice;
+    const v = voice || defaultVoice;
+    if (v) u.voice = v;
     u.rate = rate;
     u.onend = resolve;
     u.onerror = (e) => reject(new Error(e.error || 'TTS error'));

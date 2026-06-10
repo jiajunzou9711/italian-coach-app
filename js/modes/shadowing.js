@@ -58,8 +58,12 @@ export function renderShadowing(screen, pack) {
   };
   mineBtn.onclick = () => new Audio(url).play();
   screen.querySelector('#next').onclick = () => {
+    const wrapping = i === pack.shadowing.length - 1;
     i = (i + 1) % pack.shadowing.length;
     show();
+    if (wrapping) {
+      screen.querySelector('#progress').textContent += ' — 🎉 Giro completato!';
+    }
   };
   show();
 }

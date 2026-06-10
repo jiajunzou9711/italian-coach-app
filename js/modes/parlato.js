@@ -55,7 +55,6 @@ export function renderParlato(screen, pack) {
         correct: best.r.ok,
         target: item().target_point,
       };
-      addResult(pack.date, last);
       overrideBtn.classList.toggle('hidden', best.r.ok);
       nextBtn.classList.remove('hidden');
     } catch (e) {
@@ -65,12 +64,16 @@ export function renderParlato(screen, pack) {
 
   overrideBtn.onclick = () => {
     if (!last) return;
-    addResult(pack.date, { ...last, correct: true, override: true });
+    last = { ...last, correct: true, override: true };
     fb.innerHTML += '<p>✅ Segnato come giusto (override).</p>';
     overrideBtn.classList.add('hidden');
   };
 
   nextBtn.onclick = () => {
+    if (last) {
+      addResult(pack.date, last);
+      last = null;
+    }
     if (i < pack.speaking.length - 1) {
       i++;
       show();

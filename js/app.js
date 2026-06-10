@@ -1,5 +1,6 @@
 import { pickLatestDate } from './pack-schema.js';
 import { getSettings, saveSettings, syncPending } from './results.js';
+import { loadItalianVoice, setDefaultVoice } from './speech.js';
 import { renderAscolto } from './modes/ascolto.js';
 import { renderDettato } from './modes/dettato.js';
 import { renderParlato } from './modes/parlato.js';
@@ -42,12 +43,15 @@ function renderSettings() {
   const s = getSettings();
   screen.innerHTML = `
     <h2>Impostazioni</h2>
-    <label>GitHub owner <input id="owner" autocapitalize="off" value="${s.owner || ''}"></label>
-    <label>Repo <input id="repo" autocapitalize="off" value="${s.repo || 'italian-coach-app'}"></label>
-    <label>Token (fine-grained, solo questo repo) <input id="token" type="password" value="${s.token || ''}"></label>
+    <label>GitHub owner <input id="owner" autocapitalize="off"></label>
+    <label>Repo <input id="repo" autocapitalize="off"></label>
+    <label>Token (fine-grained, solo questo repo) <input id="token" type="password"></label>
     <button id="save">Salva</button>
     <button id="sync">Sincronizza risultati</button>
     <p id="sync-status"></p>`;
+  screen.querySelector('#owner').value = s.owner || '';
+  screen.querySelector('#repo').value = s.repo || 'italian-coach-app';
+  screen.querySelector('#token').value = s.token || '';
   const status = screen.querySelector('#sync-status');
   screen.querySelector('#save').onclick = () => {
     saveSettings({
@@ -86,6 +90,7 @@ document.querySelectorAll('nav button').forEach((b) => {
 });
 
 (async () => {
+  loadItalianVoice().then(setDefaultVoice).catch(() => {});
   try {
     await loadPack();
   } catch (e) {

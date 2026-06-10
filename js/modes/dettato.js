@@ -21,6 +21,7 @@ export function renderDettato(screen, pack) {
     screen.querySelector('#answer').value = '';
     screen.querySelector('#feedback').innerHTML = '';
     screen.querySelector('#next').classList.add('hidden');
+    screen.querySelector('#check').disabled = false;
   };
 
   screen.querySelector('#play').onclick = () => speak(item().it, { rate: 0.85 });
@@ -34,6 +35,7 @@ export function renderDettato(screen, pack) {
       `<p>${diff.map((w) => `<span class="w-${w.status}">${w.word}</span>`).join(' ')}</p>` +
       `<p class="expected">Testo: ${item().it}</p>`;
     addResult(pack.date, { mode: 'dettato', expected: item().it, given, correct: r.ok });
+    screen.querySelector('#check').disabled = true;
     screen.querySelector('#next').classList.remove('hidden');
   };
   screen.querySelector('#next').onclick = () => {

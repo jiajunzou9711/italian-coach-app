@@ -29,8 +29,18 @@ export function renderAscolto(screen, pack) {
   screen.querySelectorAll('.play').forEach((b) => {
     b.onclick = () => speak(d.lines[b.dataset.i].it, { rate: rate() });
   });
-  screen.querySelector('#play-all').onclick = async () => {
-    for (const l of d.lines) await speak(l.it, { rate: rate() });
+  const playAllBtn = screen.querySelector('#play-all');
+  playAllBtn.onclick = async () => {
+    playAllBtn.disabled = true;
+    try {
+      for (const l of d.lines) {
+        await speak(l.it, { rate: rate() }).catch((e) => {
+          if (!e.message.includes('interrupted')) throw e;
+        });
+      }
+    } finally {
+      playAllBtn.disabled = false;
+    }
   };
   screen.querySelector('#show-text').onclick = () =>
     screen.querySelectorAll('.it').forEach((e) => e.classList.remove('hidden'));
@@ -46,9 +56,12 @@ export function renderAscolto(screen, pack) {
     </div>`).join('');
   qEl.querySelectorAll('.opt').forEach((b) => {
     b.onclick = () => {
+      const div = b.closest('.q');
+      if (div.dataset.answered) return;
+      div.dataset.answered = '1';
       const q = d.questions[b.dataset.qi];
       const ok = Number(b.dataset.oi) === q.answer;
-      b.closest('.q').querySelector('.verdict').textContent = ok ? '✅' : `❌ → ${q.options[q.answer]}`;
+      div.querySelector('.verdict').textContent = ok ? '✅' : `❌ → ${q.options[q.answer]}`;
       addResult(pack.date, {
         mode: 'ascolto',
         item: q.q,
