@@ -33,6 +33,10 @@ test('fuzzyMatch picks the closest of multiple accepted answers', () => {
   assert.equal(r.ok, true);
 });
 
+test('fuzzyMatch handles empty accepted list', () => {
+  assert.deepEqual(fuzzyMatch('ciao', []), { ok: false, expected: null, distance: Infinity });
+});
+
 test('wordDiff marks ok/missing/extra words', () => {
   assert.deepEqual(wordDiff('voglio leggere un libro', 'voglio leggo un libro'), [
     { word: 'voglio', status: 'ok' },

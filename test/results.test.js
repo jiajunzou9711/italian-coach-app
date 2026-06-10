@@ -8,10 +8,11 @@ test('buildResultsPayload summarizes counts', () => {
     { mode: 'parlato', correct: false },
     { mode: 'parlato', correct: true, override: true },
     { mode: 'dettato', correct: true },
+    { mode: 'parlato', correct: false, override: true },
   ];
   const p = buildResultsPayload('2026-06-10', items);
   assert.equal(p.date, '2026-06-10');
-  assert.deepEqual(p.counts, { total: 4, correct: 2, incorrect: 1, overridden: 1 });
-  assert.equal(p.items.length, 4);
+  assert.deepEqual(p.counts, { total: 5, correct: 2, incorrect: 1, overridden: 2 });
+  assert.equal(p.items.length, 5);
   assert.ok(typeof p.generated === 'string');
 });

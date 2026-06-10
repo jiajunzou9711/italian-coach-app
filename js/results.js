@@ -70,5 +70,8 @@ async function putFile(cfg, path, obj, message) {
 }
 
 function toBase64(s) {
-  return btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+  const bytes = new TextEncoder().encode(s);
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin);
 }

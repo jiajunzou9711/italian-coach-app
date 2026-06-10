@@ -32,6 +32,7 @@ export function levenshtein(a, b) {
 // length (min 1 edit), so short answers stay strict and long ones
 // forgive a typo or an STT slip.
 export function fuzzyMatch(answer, accepted) {
+  if (!accepted.length) return { ok: false, expected: null, distance: Infinity };
   const na = normalize(answer);
   let best = null;
   for (const exp of accepted) {
